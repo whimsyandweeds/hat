@@ -1,0 +1,199 @@
+@import "tailwindcss";
+@import "@fontsource-variable/fraunces/wght.css";
+@import "@fontsource-variable/outfit/wght.css";
+
+@theme {
+  --color-bg: #0c0a0e;
+  --color-ink: #f3eee6;
+  --color-muted: #a398a6;
+  --color-sage: #8a9a7c;
+  --color-veil: #a08cb4;
+  --font-display: "Fraunces Variable", Palatino, "Palatino Linotype", serif;
+  --font-sans: "Outfit Variable", "Avenir Next", sans-serif;
+  --radius: 999px;
+}
+
+@layer base {
+  html,
+  body {
+    height: 100%;
+    background: var(--color-bg);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+  }
+
+  body {
+    margin: 0;
+    overflow: hidden;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  button:focus-visible {
+    outline: 2px solid var(--color-sage);
+    outline-offset: 3px;
+  }
+}
+
+.stage {
+  position: relative;
+  height: 100dvh;
+  width: 100%;
+  overflow: hidden;
+  background: var(--color-bg);
+  touch-action: none;
+}
+
+.stage-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  touch-action: none;
+  background: transparent;
+}
+
+.room-video {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  opacity: 0;
+  background: #111;
+}
+
+.stage.room {
+  background: #111;
+}
+
+.stage.room .room-video {
+  opacity: 1;
+}
+
+.stage.room::after {
+  opacity: 0;
+}
+
+.stage canvas {
+  cursor: grab;
+}
+
+.stage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 42%, var(--color-bg) 100%);
+  opacity: 0.45;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  pointer-events: none;
+  padding: 1.25rem;
+}
+
+.study {
+  max-width: 18rem;
+  text-shadow: 0 1px 18px var(--color-bg);
+}
+
+.kicker {
+  margin: 0;
+  color: var(--color-sage);
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.study h1 {
+  margin: 0.35rem 0 0;
+  font-family: var(--font-display);
+  font-size: 2.6rem;
+  font-weight: 500;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+.note {
+  margin: 0.85rem 0 0;
+  max-width: 17rem;
+  color: var(--color-muted);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+.dock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding-bottom: max(0.25rem, env(safe-area-inset-bottom));
+}
+
+.hint {
+  margin: 0;
+  max-width: 22rem;
+  color: var(--color-ink);
+  font-size: 0.9rem;
+  line-height: 1.4;
+  text-shadow: 0 1px 16px var(--color-bg);
+}
+
+.views {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  pointer-events: auto;
+}
+
+.views button {
+  min-height: 2.75rem;
+  padding: 0.4rem 1rem;
+  border: 1px solid color-mix(in srgb, var(--color-veil) 45%, transparent);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--color-bg) 78%, transparent);
+  color: var(--color-ink);
+  font: inherit;
+  font-size: 0.92rem;
+}
+
+.views button[aria-pressed="true"] {
+  border-color: var(--color-sage);
+  background: color-mix(in srgb, var(--color-veil) 28%, var(--color-bg));
+}
+
+.stage.room .study,
+.stage.room .hint {
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.85),
+    0 8px 24px rgba(0, 0, 0, 0.55);
+}
+
+@media (min-width: 720px) {
+  .overlay {
+    padding: 1.75rem;
+  }
+
+  .study h1 {
+    font-size: 3.25rem;
+  }
+
+  .dock {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+}

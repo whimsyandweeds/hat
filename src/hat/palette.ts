@@ -1,0 +1,23 @@
+/** Shared with the CSS tokens in src/styles.css. Material shades stay inside purple, black, pearl, and sage. */
+export const palette = {
+  bg: "#0c0a0e",
+  ink: "#f3eee6",
+  muted: "#a398a6",
+  sage: "#8a9a7c",
+  veil: "#a08cb4",
+  velvet: "#7d6c93",
+  velvetSheen: "#f2e8fb",
+  lace: "#b3a2c4",
+  laceDeep: "#4e425c",
+  black: "#0c0a0e",
+  silk: "#141218",
+  pearl: "#f3eee6",
+  sageDeep: "#5f6e56",
+  flower: "#7a6a90",
+  bone: "#d9d0c4",
+  metal: "#5a5660",
+  light: "#fff8f3",
+  lightSage: "#d5e0cc",
+  lightFill: "#f0e7f8",
+  ground: "#2a2430",
+} as const

@@ -1,0 +1,38 @@
+{
+  "url": "http://127.0.0.1:8081/",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "Sibylline",
+      "hasCanvas": false,
+      "bodyTextLen": 179,
+      "bodyTextHash": "49122a8538ee762f85b12fd5441772e2b5497ce41906bdafd88dcb23f9b60327",
+      "bodyTextPrefix": "A LARGE HAT Sibylline Muted purple and black. Purple lace, sage ",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-built.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "Sibylline",
+      "hasCanvas": false,
+      "bodyTextLen": 179,
+      "bodyTextHash": "49122a8538ee762f85b12fd5441772e2b5497ce41906bdafd88dcb23f9b60327",
+      "bodyTextPrefix": "A LARGE HAT Sibylline Muted purple and black. Purple lace, sage ",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-built-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/app-builder-built.json",
+  "divergesFromBaseline": false,
+  "baselineReasons": []
+}
