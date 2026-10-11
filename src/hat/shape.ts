@@ -143,6 +143,16 @@ export function laceEdgeGeometry() {
   })
 }
 
+export function laceTopGeometry() {
+  const geo = gridGeometry(180, 8, (u, v, target) => {
+    const theta = u * Math.PI * 2
+    brimPoint(theta, 0.04 + v * 0.96, target)
+    target.y += 0.01
+  })
+  aimNormalY(geo, 1)
+  return geo
+}
+
 export function veilGeometry() {
   const theta0 = 0.18
   const theta1 = 1.62

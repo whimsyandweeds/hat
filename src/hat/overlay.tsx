@@ -45,7 +45,7 @@ export function Overlay() {
         <p className="kicker">A large hat</p>
         <h1>Sibylline</h1>
         <p className="note">
-          Muted purple and black. Purple lace, sage through the band, and pearls that pull away.
+          Light blue lace on the outside. Black ribbon, sage through the band, and pearls that pull away.
         </p>
       </header>
       <footer className="dock">

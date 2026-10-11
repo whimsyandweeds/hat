@@ -9,6 +9,7 @@ import {
   brimUnderGeometry,
   crownGeometry,
   laceEdgeGeometry,
+  laceTopGeometry,
   leafGeometry,
   veilGeometry,
 } from "./shape"
@@ -20,8 +21,8 @@ function useVelvet(color: string, sheen: string, roughness: number) {
         color,
         roughness,
         metalness: 0,
-        sheen: 1,
-        sheenRoughness: 0.4,
+        sheen: 0.18,
+        sheenRoughness: 0.62,
         sheenColor: sheen,
         envMapIntensity: 0.45,
       }),
@@ -36,10 +37,11 @@ export function HatMesh() {
   const under = useMemo(() => brimUnderGeometry(), [])
   const lip = useMemo(() => brimLipGeometry(), [])
   const edge = useMemo(() => laceEdgeGeometry(), [])
+  const laceTop = useMemo(() => laceTopGeometry(), [])
   const veil = useMemo(() => veilGeometry(), [])
   const claspGeo = useMemo(() => leafGeometry(0.2, 0.07), [])
-  const velvet = useVelvet(palette.velvet, palette.velvetSheen, 0.9)
-  const blackVelvet = useVelvet(palette.silk, "#3a3344", 0.84)
+  const velvet = useVelvet("#1f86b4", "#d7f3ff", 0.62)
+  const blackVelvet = useVelvet("#16141a", "#3a3344", 0.84)
   const silk = useMemo(
     () =>
       new THREE.MeshPhysicalMaterial({
@@ -88,8 +90,10 @@ export function HatMesh() {
       side: THREE.BackSide,
     })
   }, [])
-  const edgeLace = useMemo(() => createLaceMaterial([16, 2.6]), [])
-  const veilLace = useMemo(() => createLaceMaterial([8, 6]), [])
+  const edgeLace = useMemo(() => createLaceMaterial([9, 2.2]), [])
+  const topLace = useMemo(() => createLaceMaterial([20, 8]), [])
+  const veilLace = useMemo(() => createLaceMaterial([5, 4]), [])
+  const crownLace = useMemo(() => createLaceMaterial([8, 14]), [])
   const metal = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
@@ -153,6 +157,7 @@ export function HatMesh() {
   return (
     <group>
       <mesh dispose={null} geometry={crown} material={velvet} />
+      <mesh dispose={null} geometry={crown} material={crownLace} scale={1.012} renderOrder={2} />
       <mesh dispose={null} geometry={crown} material={lining} scale={[0.9, 0.99, 0.9]} position={[0.015, 0.03, 0]} />
       <mesh dispose={null} geometry={top} material={velvet} />
       <mesh dispose={null} geometry={under} material={blackVelvet} />
@@ -161,6 +166,7 @@ export function HatMesh() {
         <cylinderGeometry args={[0.575, 0.6, 0.2, 72, 1, true]} />
       </mesh>
       <mesh dispose={null} geometry={edge} material={edgeLace} renderOrder={2} />
+      <mesh dispose={null} geometry={laceTop} material={topLace} renderOrder={2} />
       <mesh dispose={null} geometry={veil} material={veilLace} renderOrder={3} />
       <mesh dispose={null}
         geometry={claspGeo}

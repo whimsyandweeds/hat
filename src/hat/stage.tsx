@@ -77,11 +77,11 @@ function Sky() {
 function Lights() {
   return (
     <>
-      <hemisphereLight args={[palette.lightFill, palette.ground, 1.45]} />
-      <directionalLight position={[3.4, 6.4, 4.2]} intensity={6} color={palette.light} />
-      <directionalLight position={[-3.2, 4.2, 2.4]} intensity={2.4} color={palette.velvetSheen} />
-      <directionalLight position={[-0.4, 2.2, -4.8]} intensity={3.4} color={palette.lightFill} />
-      <pointLight position={[1.15, 1.15, 1.8]} intensity={36} distance={12} decay={2} color={palette.pearl} />
+      <hemisphereLight args={[palette.lightFill, palette.ground, 0.85]} />
+      <directionalLight position={[3.4, 6.4, 4.2]} intensity={1.55} color={palette.light} />
+      <directionalLight position={[-3.2, 4.2, 2.4]} intensity={1.05} color={palette.velvetSheen} />
+      <directionalLight position={[-0.4, 2.2, -4.8]} intensity={1.25} color={palette.lightFill} />
+      <pointLight position={[1.15, 1.15, 1.8]} intensity={10} distance={12} decay={2} color={palette.pearl} />
     </>
   )
 }
@@ -149,7 +149,16 @@ function Motes({ still }: { still: boolean }) {
   )
 }
 
-function frame(id: ViewId, aspect: number, pos: THREE.Vector3, target: THREE.Vector3) {
+function frame(id: ViewId, aspect: number, fov: number, pos: THREE.Vector3, target: THREE.Vector3) {
+  if (id === "whole") {
+    // Low enough that the buttons don't cover the brim, high enough to clear the title.
+    target.set(0.02, 0.86, 0.0)
+    const halfV = THREE.MathUtils.degToRad(fov * 0.5)
+    const halfH = Math.atan(Math.tan(halfV) * Math.max(aspect, 0.38))
+    const dist = (2.68 / Math.sin(Math.min(halfV, halfH))) * 1.05
+    pos.set(0.16, 0.22, 1).normalize().multiplyScalar(dist).add(target)
+    return
+  }
   const spec = VIEWS[id]
   target.set(spec.target[0], spec.target[1], spec.target[2])
   pos.set(spec.position[0], spec.position[1], spec.position[2])
@@ -172,11 +181,22 @@ function CameraRig({ still }: { still: boolean }) {
   const blend = useRef(0)
   const lastView = useRef(view)
   const ready = useRef(false)
+  const fov = useRef(30)
 
   useFrame((_, dt) => {
     const aspect = size.width / Math.max(1, size.height)
+    const cam = camera as THREE.PerspectiveCamera
+    const step = Math.min(dt, 0.05)
+    const wantFov = view === "whole" ? (aspect < 0.92 ? 54 : 32) : 30
+    if (!ready.current) fov.current = wantFov
+    else fov.current += (wantFov - fov.current) * (1 - Math.exp(-4 * step))
+    if (Math.abs(cam.fov - fov.current) > 0.02) {
+      cam.fov = fov.current
+      cam.updateProjectionMatrix()
+    }
+
     if (!ready.current && controls) {
-      frame(view, aspect, goalPos.current, goalTarget.current)
+      frame(view, aspect, fov.current, goalPos.current, goalTarget.current)
       camera.position.copy(goalPos.current)
       controls.target.copy(goalTarget.current)
       controls.update()
@@ -186,10 +206,10 @@ function CameraRig({ still }: { still: boolean }) {
     if (lastView.current !== view) {
       lastView.current = view
       blend.current = 1
-      frame(view, aspect, goalPos.current, goalTarget.current)
+      frame(view, aspect, wantFov, goalPos.current, goalTarget.current)
     }
     if (blend.current < 0.001 || !controls) return
-    const k = 1 - Math.exp(-3.2 * Math.min(dt, 0.05))
+    const k = 1 - Math.exp(-3.2 * step)
     camera.position.lerp(goalPos.current, k)
     controls.target.lerp(goalTarget.current, k)
     blend.current *= 1 - k
@@ -222,7 +242,7 @@ function RoomClear({ room }: { room: boolean }) {
   const gl = useThree((s) => s.gl)
   useLayoutEffect(() => {
     gl.setClearColor(0x000000, room ? 0 : 1)
-    gl.toneMappingExposure = room ? 1.42 : 1.28
+    gl.toneMappingExposure = room ? 0.96 : 1.02
     gl.domElement.style.background = "transparent"
   }, [gl, room])
   return null
@@ -241,7 +261,7 @@ export function Stage() {
         antialias: true,
         premultipliedAlpha: false,
         toneMapping: THREE.ACESFilmicToneMapping,
-        toneMappingExposure: 1.28,
+        toneMappingExposure: 1.05,
       }}
       onCreated={({ gl }) => {
         gl.setClearColor(0x000000, 0)
